@@ -1,11 +1,29 @@
 import { Category } from '../model/Category';
 import { ICategoriesRepository,ICreateCategoryDTO} from './ICategoriesRepository';
 
+/*
+ singleton
+  criar apenas uma estancia de uma classe de forma global
+*/
+
 class CategoriesRepository implements ICategoriesRepository {
   private categories: Category[];
 
-  constructor() {
+  //singleton pattern
+  private static INSTANCE: CategoriesRepository;
+
+  //deixar constructor como privateno quando usar singleton
+  private constructor() {
     this.categories = [];
+  }
+
+  //responsável por criar uma estancia ou repassar uma já existente
+  public static getInstance(): CategoriesRepository{
+    if(!CategoriesRepository.INSTANCE){
+      CategoriesRepository.INSTANCE = new CategoriesRepository();
+    }
+
+    return CategoriesRepository.INSTANCE;
   }
 
   create({ name, description }: ICreateCategoryDTO): void {
